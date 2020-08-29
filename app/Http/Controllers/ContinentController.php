@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Country;
 use App\Models\Continent;
 use Validator;
 
-class CountryController extends Controller
+class ContinentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        return response()->json(Country::get(), 200);
+        return response()->json(Continent::get(), 200);
     }
 
     /**
@@ -39,23 +38,14 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'country' => 'required',
-            'name' => 'required',
-            'code' => 'required',
+            'name' => 'required'
         ];
-
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
-
-        $continent = Continent::find($request['country']);
-        $country = new Country();
-        $country->name = $request['name'];
-        $country->code =  $request['code'];
-        $continent->countries()->save($country);
-        return response()->json($country, 201);
-
+        $continent = Continent::create($request->all());
+        return response()->json($continent, 201);
     }
 
     /**
@@ -66,11 +56,11 @@ class CountryController extends Controller
      */
     public function show($id)
     {
-        $country = Country::find($id);
-        if(is_null($country)){
+        $continent = Continent::find($id);
+        if(is_null($continent)){
             return response()->json('Data not found', 404);
         }
-        return response()->json($country, 200);
+        return response()->json($continent, 200);
     }
 
     /**
@@ -93,12 +83,12 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $country = Country::find($id);
-        if(is_null($country)){
+        $continent = Continent::find($id);
+        if(is_null($continent)){
             return response()->json('Data not found', 404);
         }
-        $country->update($request->all());
-        return response()->json($country, 200);
+        $continent->update($request->all());
+        return response()->json($continent, 200);
     }
 
     /**
@@ -109,11 +99,11 @@ class CountryController extends Controller
      */
     public function destroy($id)
     {
-        $country = Country::find($id);
-        if(is_null($country)){
+        $continent = Continent::find($id);
+        if(is_null($continent)){
             return response()->json('Data not found', 404);
         }
-        $country->delete();
+        $continent->delete();
         return response()->json(null, 204);
     }
 }
