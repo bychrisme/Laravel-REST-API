@@ -39,7 +39,7 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'country' => 'required',
+            'continent' => 'required',
             'name' => 'required',
             'code' => 'required',
         ];
@@ -49,7 +49,7 @@ class CountryController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $continent = Continent::find($request['country']);
+        $continent = Continent::find($request['continent']);
         $country = new Country();
         $country->name = $request['name'];
         $country->code =  $request['code'];
@@ -70,6 +70,7 @@ class CountryController extends Controller
         if(is_null($country)){
             return response()->json('Data not found', 404);
         }
+        $country->continent;
         return response()->json($country, 200);
     }
 
