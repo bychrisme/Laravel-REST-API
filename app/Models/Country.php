@@ -16,4 +16,9 @@ class Country extends Model
     public function continent(){
         return $this->belongsTo(Continent::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_countries', 'user_id', 'country_id');
+    }
 }

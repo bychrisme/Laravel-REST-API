@@ -98,6 +98,11 @@ class CountryController extends Controller
         if(is_null($country)){
             return response()->json('Data not found', 404);
         }
+        $continent = Continent::find($request['continent']);
+        if(!$continent && $request['continent']){
+            return response()->json("continent doesn't exists", 404);
+        }
+        $country->continent()->associate($continent);
         $country->update($request->all());
         return response()->json($country, 200);
     }
@@ -116,5 +121,14 @@ class CountryController extends Controller
         }
         $country->delete();
         return response()->json(null, 204);
+    }
+
+    public function updateContinent(Request $request, $id){
+        $country = Country::find($id);
+        if(is_null($country)){
+            return response()->json('Data not found', 404);
+        }
+        $country->continent()->associate(Continent::find($continent));
+        $country->save();
     }
 }
